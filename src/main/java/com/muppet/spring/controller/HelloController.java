@@ -2,6 +2,7 @@ package com.muppet.spring.controller;
 
 import com.muppet.spring.AppMain;
 import com.muppet.spring.model.Hello;
+import com.muppet.spring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HelloController {
 
     @RequestMapping("/hello")
-    public String hello() {
+    public User hello() {
         new Hello().init();
-        return "hello configuration";
+        return new User().setAge(1).setEmail("email").setName("yuhaiqiang");
     }
 }
