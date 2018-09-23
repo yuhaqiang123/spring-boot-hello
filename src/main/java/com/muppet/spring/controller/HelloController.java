@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @org.springframework.web.bind.annotation.RestController
 public class HelloController {
 
+
     @RequestMapping("/hello")
     public User hello() {
-        new Hello().init();
-        return new User().setAge(1).setEmail("email").setName("yuhaiqiang");
+        User user = new User();
+        return user;
     }
 }
