@@ -1,20 +1,17 @@
 package com.muppet.spring;
 
-import com.muppet.spring.model.Hello;
-import org.aspectj.lang.Aspects;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
-import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.ImportResource;
 
 import java.util.Arrays;
 
-
-//@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
+@MapperScan(basePackages = "com.muppet.spring.model.mapper")
 @ImportResource(value = {"classpath:application-context.xml"})
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
