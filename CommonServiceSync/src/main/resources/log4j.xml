@@ -23,17 +23,69 @@
             <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="%d{[yyyy-MM-dd HH:mm:ss]}[%level][%t][%c{1}:%L][%msg]%n"/>
         </Console>
+
+        <RollingFile name="RootLogger" fileName="${sys:user.dir}/logs/management-server.log"
+                     filePattern="${sys:user.dir}/logs/management-server.log.%d{yyyyMMddHH}">
+            <PatternLayout>
+                <pattern>
+                    [%p][%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}][%c{1}]%marker||thread=%thread||traceid=%X{traceId}||spanid=%X{spanid}||api=%X{api}||%m%n
+                </pattern>
+            </PatternLayout>
+            <CronTriggeringPolicy schedule="0 0 * * * ?"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${sys:user.dir}/logs/" maxDepth="1" testMode="false">
+                    <IfFileName glob="management-server.log.??????????"/>
+                    <IfLastModified age="60d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+            <!--<Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>-->
+        </RollingFile>
+
+        <RollingFile name="RootErrorLogger" fileName="${sys:user.dir}/logs/management-server.log.wf"
+                     filePattern="${sys:user.dir}/logs/management-server.log.wf.%d{yyyyMMddHH}">
+            <Filters>
+                <!-- 过滤level低于warn的日志，*.log.wf仅输出warn、error或fatal日志 -->
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout>
+                <pattern>
+                    [%p][%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}][%c{1}]%marker||thread=%thread||traceid=%X{traceId}||spanid=%X{spanid}||api=%X{api}||%m%n
+                </pattern>
+            </PatternLayout>
+            <CronTriggeringPolicy schedule="0 0 * * * ?"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${sys:user.dir}/logs/" maxDepth="1" testMode="false">
+                    <IfFileName glob="management-server.log.wf.??????????"/>
+                    <IfLastModified age="60d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+            <!--<Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>-->
+        </RollingFile>
+
+
+        <Async name="Async" ignoreExceptions="false" bufferSize="512">
+            <AppenderRef ref="RootLogger"/>
+            <AppenderRef ref="RootErrorLogger"/>
+            <AppenderRef ref="Console"/>
+        </Async>
     </Appenders>
 
     <Loggers>
-        <Root name="com.muppet.spring" level="ERROR">
-            <AppenderRef ref="Console"/>
+
+        <Logger name="com.muppet.spring" level="debug">
+            <AppenderRef ref="Async"/>
             <!-- <AppenderRef ref="ApplicationLog" /> -->
-        </Root>
-        <Root name="org.springframework" level="ERROR">
-            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.springframework" level="debug">
+            <AppenderRef ref="Async"/>
+        </Logger>
+
+        <Root level="warn">
+            <AppenderRef ref="Async"/>
         </Root>
     </Loggers>
-
-
 </log4j:configuration>

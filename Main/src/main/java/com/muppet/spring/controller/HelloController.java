@@ -2,6 +2,7 @@ package com.muppet.spring.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.muppet.Email;
+import com.muppet.EmailResponse;
 import com.muppet.EmailService;
 import com.muppet.spring.model.User;
 import com.muppet.spring.model.mapper.UserMapper;
@@ -37,8 +38,8 @@ public class HelloController {
 
     @RequestMapping(value = "/email", method = RequestMethod.PUT)
     public String sendEmail() {
-        es.send(new Email("email is send"));
-        return "ok";
+        EmailResponse response = es.send(new Email("email is send"));
+        return response.getMsg();
     }
 
 }

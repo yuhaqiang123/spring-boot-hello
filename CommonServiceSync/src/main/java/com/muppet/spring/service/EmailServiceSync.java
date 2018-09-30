@@ -3,6 +3,7 @@ package com.muppet.spring.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.muppet.Email;
+import com.muppet.EmailResponse;
 import com.muppet.EmailService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,8 @@ public class EmailServiceSync implements EmailService {
     Logger logger = LogManager.getLogger(this.getClass());
 
     @Override
-    public void send(Email email) {
+    public EmailResponse send(Email email) {
         logger.error("email message:{}", email.message);
+        return new EmailResponse().setSuccess(true).setMsg("dubbo rpc request is success");
     }
 }
