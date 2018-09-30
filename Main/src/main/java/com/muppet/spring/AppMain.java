@@ -7,12 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.ImportResource;
 
 import java.util.Arrays;
 
+
 @MapperScan(basePackages = "com.muppet.spring.model.mapper")
-@ImportResource(value = {"classpath:application-context.xml"})
+//@ImportResource(value = {"classpath:application-context.xml"})
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @SpringBootApplication
@@ -34,4 +34,15 @@ public class AppMain {
             }
         };
     }
+
+/*
+    @Bean()
+    public ConsumerConfig providerConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
+        ConsumerConfig providerConfig = new ConsumerConfig(); // 手动注入，不再由spring容器去根据类名 // (com.alibaba.dubbo.config.ApplicationConfig)去获取对应的值
+        providerConfig.setApplication(applicationConfig);
+        providerConfig.setRegistry(registryConfig);
+        return providerConfig;
+    }
+*/
+
 }

@@ -20,7 +20,7 @@ public class Test {
 
     @org.junit.Test
     public void test() {
-        logger.error("hello test:{}", new User().getEmail());
+        logger.error("hello test:{}", new User().getPassword());
     }
 }
 

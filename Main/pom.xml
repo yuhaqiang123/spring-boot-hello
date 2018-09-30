@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>spring</artifactId>
+        <groupId>com.muppet</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>Main</artifactId>
+
+
+    <dependencies>
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
+        <!--
+
+                <dependency>
+                    <groupId>io.dubbo.springboot</groupId>
+                    <artifactId>spring-boot-starter-dubbo</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.zookeeper</groupId>
+                            <artifactId>zookeeper</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <version>1.0.0</version>
+                </dependency>
+
+        -->
+
+        <dependency>
+            <groupId>com.muppet</groupId>
+            <artifactId>header</artifactId>
+            <version>${header.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.muppet</groupId>
+            <artifactId>baselib</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!--dubbo -->
+        <dependency>
+            <groupId>com.alibaba.boot</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>0.2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>${zookeeper.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <configuration>
+                    <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.7</version>
+                <configuration>
+                    <complianceLevel>1.8</complianceLevel>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <verbose>true</verbose>
+                    <Xlint>ignore</Xlint>
+                    <encoding>UTF-8</encoding>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-aspects</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 在编译期织入 -->
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
