@@ -8,5 +8,9 @@ public class Email implements Serializable {
         this.message = message;
     }
 
+    public Email() {
+
+    }
+
     public String message;
 }
