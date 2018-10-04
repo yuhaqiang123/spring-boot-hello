@@ -2,11 +2,8 @@ package com.muppet.spring.aspect;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**

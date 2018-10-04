@@ -1,6 +1,5 @@
 package com.muppet.spring;
 
-import com.muppet.spring.model.Hello;
 import com.muppet.spring.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
