@@ -1,10 +1,10 @@
 package com.muppet.auth.service;
 
-import java.util.Map;
+import com.muppet.vo.cs.UserLoginVo;
+import com.muppet.vo.cs.UserRegisterVo;
+import com.muppet.vo.sc.OnlineUserInfo;
 
-import com.muppet.auth.vo.cs.UserLoginVo;
-import com.muppet.auth.vo.cs.UserRegisterVo;
-import com.muppet.auth.vo.sc.OnlineUserInfo;
+import java.util.Map;
 
 /**
  * 用户相关操作
@@ -37,7 +37,7 @@ public interface UserService{
 	 * @return 与JSESSIONID绑定的验证码.如果没有为JSESSIONID生成过
 	 * 验证码,或者验证码过期,返回 null
 	 */
-	public String getValidateCode(String sessionId);
+	//public String getValidateCode(String sessionId);
 	
 	/**
 	 * 
