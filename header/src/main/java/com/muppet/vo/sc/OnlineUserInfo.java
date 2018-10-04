@@ -1,4 +1,4 @@
-package com.muppet.auth.vo.sc;
+package com.muppet.vo.sc;
 
 import java.util.Date;
 

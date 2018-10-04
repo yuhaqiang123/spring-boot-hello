@@ -9,7 +9,7 @@ import java.util.Date;
 public class User {
 
 
-    @Column(columnname = "user_id")
+    @Column(columnname = "id")
     private String id;
 
     @Column(columnname = "nick_name")

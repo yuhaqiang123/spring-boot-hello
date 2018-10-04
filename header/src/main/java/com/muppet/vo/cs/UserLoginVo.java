@@ -1,10 +1,11 @@
-package com.muppet.auth.vo.cs;
-
-import javax.validation.constraints.NotNull;
+package com.muppet.vo.cs;
 
 import org.hibernate.validator.constraints.Email;
 
-public class UserLoginVo {
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+
+public class UserLoginVo implements Serializable {
 
 	@NotNull(message = "user.login.email.null")
 	@Email(message = "user.login.email.failed")

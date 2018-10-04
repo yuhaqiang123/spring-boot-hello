@@ -2,12 +2,12 @@ package com.muppet.auth.controller;
 
 import com.muppet.auth.common.MS;
 import com.muppet.auth.common.NetUtil;
-import com.muppet.auth.service.UserService;
+import com.muppet.service.UserService;
 import com.muppet.auth.transfer.AjaxResult;
-import com.muppet.auth.vo.cs.EmailVo;
-import com.muppet.auth.vo.cs.UserLoginVo;
-import com.muppet.auth.vo.cs.UserRegisterVo;
-import com.muppet.auth.vo.sc.OnlineUserInfo;
+import com.muppet.vo.cs.EmailVo;
+import com.muppet.vo.cs.UserLoginVo;
+import com.muppet.vo.cs.UserRegisterVo;
+import com.muppet.vo.sc.OnlineUserInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

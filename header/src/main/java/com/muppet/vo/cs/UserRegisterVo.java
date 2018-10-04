@@ -1,11 +1,12 @@
-package com.muppet.auth.vo.cs;
+package com.muppet.vo.cs;
 
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
-public class UserRegisterVo {
+public class UserRegisterVo implements Serializable {
 
 
     private long registerIp;

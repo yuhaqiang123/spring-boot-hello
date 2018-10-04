@@ -1,4 +1,4 @@
-package com.muppet.auth.vo.cs;
+package com.muppet.vo.cs;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,18 +1,21 @@
 package com.muppet.auth.service;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.muppet.auth.common.MS;
 import com.muppet.auth.common.Util;
 import com.muppet.auth.dao.UserDaoSupport;
 import com.muppet.auth.model.User;
-import com.muppet.auth.vo.cs.UserLoginVo;
-import com.muppet.auth.vo.cs.UserRegisterVo;
-import com.muppet.auth.vo.sc.OnlineUserInfo;
+import com.muppet.service.UserService;
+import com.muppet.vo.cs.UserLoginVo;
+import com.muppet.vo.cs.UserRegisterVo;
+import com.muppet.vo.sc.OnlineUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
 
+@Service(version = "v1.0.0", interfaceClass = UserService.class)
 @Component
 public class UserServiceSupport implements UserService {
 
@@ -52,7 +55,7 @@ public class UserServiceSupport implements UserService {
      * @return 如果相关验证码存在, 那么返回其值, 否则返回null
      */
     public String removeValidateCode(String sessionId) {
-        String code = this.getValidateCode(sessionId);
+        String code = getValidateCode(sessionId);
         sessionId += validateCodeSuffix;
         return jedis.del(sessionId) > 0 ? code : null;
     }
@@ -65,6 +68,9 @@ public class UserServiceSupport implements UserService {
      * @return
      */
     public boolean emailUnique(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("email can not be null");
+        }
         List<User> list = userDaoSupport.queryForObject(
                 "select email from tb_user where email = ?", new Object[]{email}, User.class);
         if (list == null || list.size() == 0) {
@@ -83,7 +89,7 @@ public class UserServiceSupport implements UserService {
      */
     public Map<String, String> register(UserRegisterVo userVo) {
         User user = new User();
-        user.setId(UUID.randomUUID().toString());
+        user.setId(UUID.randomUUID().toString().replace("-", ""));
         user.setEmail(userVo.getEmail());
         user.setRegisterIp(userVo.getRegisterIp());
         String password = userVo.getPassword();
@@ -92,6 +98,7 @@ public class UserServiceSupport implements UserService {
         user.setLastLoginTime(new Date(System.currentTimeMillis()));
         user.setNickName(userVo.getEmail());
         if (this.emailUnique(userVo.getEmail())) {
+            userDaoSupport.add(user);
             return null;
         } else {
             Map<String, String> map = new HashMap<String, String>();

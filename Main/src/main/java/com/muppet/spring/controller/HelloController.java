@@ -7,6 +7,7 @@ import com.alibaba.dubbo.rpc.service.GenericService;
 import com.muppet.Email;
 import com.muppet.EmailResponse;
 import com.muppet.EmailService;
+import com.muppet.service.UserService;
 import com.muppet.spring.model.User;
 import com.muppet.spring.model.mapper.UserMapper;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +29,9 @@ public class HelloController {
 
     @Autowired
     UserMapper um;
+
+    @Reference(version = "v1.0.0")
+    UserService us;
 
     @RequestMapping("/hello")
     public User hello() {
@@ -99,6 +103,12 @@ public class HelloController {
         } finally {
         }
         return "ok";
+    }
+
+    @RequestMapping(value = "/email/validate", method = RequestMethod.POST)
+    public String validate(String email) {
+        boolean unique = us.emailUnique(email);
+        return unique ? "可以注册" : "不可以注册";
     }
 
 }
