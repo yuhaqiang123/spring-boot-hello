@@ -6,17 +6,16 @@ import com.muppet.auth.common.Util;
 import com.muppet.auth.dao.UserDaoSupport;
 import com.muppet.auth.model.User;
 import com.muppet.service.UserService;
+import com.muppet.service.UuidService;
 import com.muppet.vo.cs.UserLoginVo;
 import com.muppet.vo.cs.UserRegisterVo;
-import com.muppet.vo.sc.OnlineUserInfo;
+import com.muppet.vo.sc.UserToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
 
 @Service(version = "v1.0.0", interfaceClass = UserService.class)
-@Component
 public class UserServiceSupport implements UserService {
 
     public UserServiceSupport() {
@@ -31,6 +30,9 @@ public class UserServiceSupport implements UserService {
 
     @Autowired
     private MS ms;
+
+    @Autowired
+    private UuidService uuidService;
 
     private static final String validateCodeSuffix = "validateCode";
 
@@ -69,7 +71,7 @@ public class UserServiceSupport implements UserService {
      */
     public boolean emailUnique(String email) {
         if (email == null) {
-            throw new IllegalArgumentException("email can not be null");
+            throw new RuntimeException("email can not be null");
         }
         List<User> list = userDaoSupport.queryForObject(
                 "select email from tb_user where email = ?", new Object[]{email}, User.class);
@@ -111,7 +113,7 @@ public class UserServiceSupport implements UserService {
     /**
      * 登录服务
      */
-    public OnlineUserInfo login(UserLoginVo userVo) {
+    public UserToken login(UserLoginVo userVo) {
         String password = userVo.getPassword();
         String email = userVo.getEmail();
         String encrptPassword = Util.encrptPassword(password);
@@ -119,14 +121,14 @@ public class UserServiceSupport implements UserService {
         List<User> users = userDaoSupport.queryForObject(sql, new Object[]{email, encrptPassword}, User.class);
         if (users != null && users.size() > 0) {
             User user = users.get(0);
-            OnlineUserInfo info = new OnlineUserInfo();
+            UserToken info = new UserToken();
             info.setNickName(user.getNickName());
             info.setUserId(user.getId());
             info.setLoginTime(new Date(System.currentTimeMillis()));
-            info.setLoginIp(userVo.getLoginIp());
+            info.setTokenId(uuidService.get());
             return info;
         } else {
-            return null;
+            return UserToken.errorUserToken();
         }
     }
 

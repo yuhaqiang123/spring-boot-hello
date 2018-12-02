@@ -1,5 +1,6 @@
 package com.muppet.spring;
 
+import com.muppet.spring.model.Hello;
 import com.muppet.spring.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +20,7 @@ public class Test {
 
     @org.junit.Test
     public void test() {
-        logger.error("hello test:{}", new User().getPassword());
+        logger.error("hello test:{}", new Hello.A());
     }
 }
 

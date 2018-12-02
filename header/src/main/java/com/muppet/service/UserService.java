@@ -2,7 +2,7 @@ package com.muppet.service;
 
 import com.muppet.vo.cs.UserLoginVo;
 import com.muppet.vo.cs.UserRegisterVo;
-import com.muppet.vo.sc.OnlineUserInfo;
+import com.muppet.vo.sc.UserToken;
 
 import java.util.Map;
 
@@ -15,7 +15,7 @@ public interface UserService{
 
 	public Map<String, String> register(UserRegisterVo user) ;
 	
-	public OnlineUserInfo login(UserLoginVo user) ;
+	public UserToken login(UserLoginVo user) ;
 	
 	public boolean emailUnique(String email);
 	

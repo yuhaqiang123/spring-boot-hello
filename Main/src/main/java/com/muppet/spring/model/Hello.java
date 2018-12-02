@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable(preConstruction = true, autowire = Autowire.BY_TYPE)
 public class Hello {
+
     Logger logger = LogManager.getLogger(this.getClass());
+
 
     @Autowired
     private ControllerAspect aspect;
@@ -22,4 +24,6 @@ public class Hello {
         logger.error("ah");
         logger.error("Hello is {}", aspect.getClass().getName());
     }
+
+
 }

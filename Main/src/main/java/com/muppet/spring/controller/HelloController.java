@@ -4,23 +4,30 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.service.EchoService;
 import com.alibaba.dubbo.rpc.service.GenericService;
+import com.muppet.Constants;
 import com.muppet.Email;
 import com.muppet.EmailResponse;
 import com.muppet.EmailService;
+import com.muppet.service.ExceptionTestService;
 import com.muppet.service.UserService;
+import com.muppet.service.UuidService;
 import com.muppet.spring.model.User;
 import com.muppet.spring.model.mapper.UserMapper;
+import com.muppet.vo.cs.UserLoginVo;
+import com.muppet.vo.sc.UserToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Future;
 
+@ResponseBody
 @org.springframework.web.bind.annotation.RestController
 public class HelloController {
 
@@ -109,6 +116,29 @@ public class HelloController {
     public String validate(String email) {
         boolean unique = us.emailUnique(email);
         return unique ? "可以注册" : "不可以注册";
+    }
+
+    @Reference(version = Constants.DEFAULT_VERSION)
+    private UuidService uuidService;
+
+    @ResponseBody
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public UserToken login(UserLoginVo vo) {
+        logger.info("uuid service is ok:{}", uuidService.get());
+        return us.login(vo);
+    }
+
+    private ExceptionTestService ets;
+
+    @RequestMapping("/throwe")
+    public String throwe() {
+        String s = null;
+        try {
+            s.replaceAll(",", "");
+        } catch (Throwable t) {
+            ets.throwException(t).printStackTrace();
+        }
+        return "ok";
     }
 
 }

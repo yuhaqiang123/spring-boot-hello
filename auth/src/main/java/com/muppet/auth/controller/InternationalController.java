@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.muppet.auth.service.InternationalService;
-import com.muppet.auth.transfer.AjaxResult;
+import com.muppet.auth.transfer.AppResult;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,16 +35,16 @@ public class InternationalController {
 	
 	@RequestMapping(value="/apply", method=RequestMethod.POST)
 	@ResponseBody
-	public AjaxResult international(@RequestParam(required=false, defaultValue="error") String keys, HttpServletRequest request){
+	public AppResult international(@RequestParam(required=false, defaultValue="error") String keys, HttpServletRequest request){
 		
 		if(keys.equals("error")){
-			return new AjaxResult(0, "error");
+			return new AppResult(0, "error");
 		}
 		String[] keyArray = null;
 		try{
 			keyArray = keys.split(",");
 		}catch(Exception e){
-			return new AjaxResult(0, "error");
+			return new AppResult(0, "error");
 		}
 		 
 		Map<String, String> keyMap = new HashMap<String, String>();
@@ -55,7 +55,7 @@ public class InternationalController {
 		
 		Map<String,Map> map = new HashMap<String,Map>(1);
 		map.put("msg", keyMap);
-		return new AjaxResult(1, "ok", map);
+		return new AppResult(1, "ok", map);
 	}
 	
 

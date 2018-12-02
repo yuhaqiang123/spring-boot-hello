@@ -3,11 +3,11 @@ package com.muppet.auth.controller;
 import com.muppet.auth.common.MS;
 import com.muppet.auth.common.NetUtil;
 import com.muppet.service.UserService;
-import com.muppet.auth.transfer.AjaxResult;
+import com.muppet.auth.transfer.AppResult;
 import com.muppet.vo.cs.EmailVo;
 import com.muppet.vo.cs.UserLoginVo;
 import com.muppet.vo.cs.UserRegisterVo;
-import com.muppet.vo.sc.OnlineUserInfo;
+import com.muppet.vo.sc.UserToken;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,20 +89,20 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/email/validate/unique")
-    public AjaxResult emailValidateUnique(
+    public AppResult emailValidateUnique(
             @Valid EmailVo emailVo
             , Errors emailError
             , HttpServletRequest request) {
         Object object = parseError(ms, emailError, request);
         if (null != object) {
-            return new AjaxResult(0, ms.getMessage("user.register.email.unlegal", request), object);
+            return new AppResult(0, ms.getMessage("user.register.email.unlegal", request), object);
         }
         String email = emailVo.getEmail();
         boolean success = userService.emailUnique(email);
         if (success) {
-            return new AjaxResult(1, ms.getMessage("user.register.email.unexisted", request));
+            return new AppResult(1, ms.getMessage("user.register.email.unexisted", request));
         } else {
-            return new AjaxResult(0, ms.getMessage("user.register.email.existed", request));
+            return new AppResult(0, ms.getMessage("user.register.email.existed", request));
         }
     }
 
@@ -117,9 +117,9 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/apply/validatecode")
-    public AjaxResult applyRegisterValidateCode(HttpSession session) {
+    public AppResult applyRegisterValidateCode(HttpSession session) {
         String code = userService.generateValidateCode(session.getId());
-        return new AjaxResult(1, "ok", code);
+        return new AppResult(1, "ok", code);
     }
 
 
@@ -141,7 +141,7 @@ public class UserController {
      */
     @RequestMapping("/register")
     @ResponseBody
-    public AjaxResult userRegister(@Valid @ModelAttribute UserRegisterVo userVo
+    public AppResult userRegister(@Valid @ModelAttribute UserRegisterVo userVo
             , Errors errors
             , @RequestParam(name = "clientCode", required = true) String clientCode
             , HttpSession session
@@ -151,9 +151,9 @@ public class UserController {
         if (null != map) {
             String code = userService.generateValidateCode(session.getId());
             map.put("validateCode", code);
-            return new AjaxResult(0, ms.getMessage("user.register.failed", request), map);
+            return new AppResult(0, ms.getMessage("user.register.failed", request), map);
         } else {
-            AjaxResult result = validateCode(clientCode, session, request);
+            AppResult result = validateCode(clientCode, session, request);
             if (result != null) {
                 return result;
             }
@@ -168,7 +168,7 @@ public class UserController {
             if (registerError == null) {
 
                 //没有错误,注册成功
-                return new AjaxResult(1
+                return new AppResult(1
                         , ms.getMessage("user.register.success", request));
             } else {
                 if (registerError.containsKey("email")) {
@@ -179,14 +179,14 @@ public class UserController {
                     String code = userService.generateValidateCode(session.getId());
                     registerError.put("validateCode", code);
 
-                    return new AjaxResult(3, ms.getMessage("user.register.failed", request), registerError);
+                    return new AppResult(3, ms.getMessage("user.register.failed", request), registerError);
                 }
-                return new AjaxResult(-1, ms.getMessage("user.register.failed", request));
+                return new AppResult(-1, ms.getMessage("user.register.failed", request));
             }
         }
     }
 
-    private AjaxResult validateCode(String clientCode, HttpSession session, HttpServletRequest request) {
+    private AppResult validateCode(String clientCode, HttpSession session, HttpServletRequest request) {
         String serverCode = userService.removeValidateCode(session.getId());
         if (serverCode == null || !serverCode.equals(clientCode)) {
             //logger.debug(serverCode + ":" + clientCode);
@@ -197,7 +197,7 @@ public class UserController {
             Map result = new HashMap<String, Object>();
             String code = userService.generateValidateCode(session.getId());
             result.put("validateCode", code);
-            return new AjaxResult(2, ms.getMessage("user.validateCode.incorrect", request), result);
+            return new AppResult(2, ms.getMessage("user.validateCode.incorrect", request), result);
         }
         return null;
     }
@@ -210,12 +210,12 @@ public class UserController {
      */
     @RequestMapping("/login")
     @ResponseBody
-    public AjaxResult userLogin(@Valid UserLoginVo userLogin, Errors errors
+    public AppResult userLogin(@Valid UserLoginVo userLogin, Errors errors
             , @RequestParam String clientCode
             , HttpServletRequest request
             , HttpSession session) {
 
-        AjaxResult result = validateCode(clientCode, session, request);
+        AppResult result = validateCode(clientCode, session, request);
         if (result != null) {
             return result;
         }
@@ -224,18 +224,18 @@ public class UserController {
         if (null != map) {
             String code = userService.generateValidateCode(session.getId());
             map.put("validateCode", code);
-            return new AjaxResult(0, ms.getMessage("user.login.failed", request), map);
+            return new AppResult(0, ms.getMessage("user.login.failed", request), map);
         } else {
             userLogin.setLoginIp(NetUtil.getRemortIP(request));
-            OnlineUserInfo info = userService.login(userLogin);
+            UserToken info = userService.login(userLogin);
 
             if (info == null) {
                 String code = userService.generateValidateCode(session.getId());
-                return new AjaxResult(0, ms.getMessage("user.login.failed.info", request),
+                return new AppResult(0, ms.getMessage("user.login.failed.info", request),
                         code);
             } else {
 
-                return new AjaxResult(1, ms.getMessage("user.login.success", request), info);
+                return new AppResult(1, ms.getMessage("user.login.success", request), info);
             }
         }
     }

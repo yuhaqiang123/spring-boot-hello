@@ -1,7 +1,7 @@
 package com.muppet.auth.transfer;
 
 
-public class AjaxResult {
+public class AppResult {
 	//成功失败标识，1成功，0失败
 	private int code;
 	//结果描述，存放成功信息或者异常信息
@@ -10,15 +10,15 @@ public class AjaxResult {
 	private Object result;
 	
 
-	public AjaxResult(){}
+	public AppResult(){}
 	
 
-	public AjaxResult(int code,String msg){
+	public AppResult(int code, String msg){
 		this.code = code;
 		this.msg = msg;
 	}
 	
-	public AjaxResult(int code,String msg,Object result){
+	public AppResult(int code, String msg, Object result){
 		this(code,msg);
 		this.result = result;
 	}
