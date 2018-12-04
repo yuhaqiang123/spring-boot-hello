@@ -20,7 +20,7 @@ public class Test {
 
     @org.junit.Test
     public void test() {
-        logger.error("hello test:{}", new Hello.A());
+        logger.error("hello test");
     }
 }
 
